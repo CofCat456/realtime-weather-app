@@ -47,7 +47,7 @@ async function asyncFetchWeatherForecast(cityName) {
         const weatherElements = locationData?.weatherElement.reduce(
             (neededElements, item) => {
                 if (['Wx', 'PoP', 'CI'].includes(item.elementName)) {
-                    neededElements[item.elementName] = item.time[0].parameter;
+                    neededElements[item.elementName] = item?.time[0]?.parameter;
                 }
                 return neededElements;
             },
@@ -66,7 +66,7 @@ async function asyncFetchWeatherForecast(cityName) {
     }
 }
 
-async function asyncFetchMoment(cityName) {
+async function asyncFetchMoment(sunriseCityName) {
     try {
         const now = new Date();
 
@@ -79,7 +79,7 @@ async function asyncFetchMoment(cityName) {
             .replace(/\//g, '-');
 
         const res = await fetch(
-            `${API_GET_FetchMoment}&locationName=${cityName}&dataTime=${nowDate}`
+            `${API_GET_FetchMoment}&locationName=${sunriseCityName}&dataTime=${nowDate}`
         );
         const data = await res.json();
         const locationData = await data.records.locations.location[0].time;
@@ -112,7 +112,7 @@ async function asyncFetchMoment(cityName) {
     }
 }
 
-const useWeatherApi = ({ locationName, cityName }) => {
+const useWeatherApi = ({ locationName, cityName, sunriseCityName }) => {
     const [weatherElement, setWeatherElement] = useState({
         cityName: '',
         observationTime: new Date(),
@@ -135,7 +135,7 @@ const useWeatherApi = ({ locationName, cityName }) => {
                     await Promise.all([
                         asyncFetchCurrentWeather(locationName),
                         asyncFetchWeatherForecast(cityName),
-                        asyncFetchMoment(cityName),
+                        asyncFetchMoment(sunriseCityName),
                     ]);
 
                 console.log('成功抓取資料', {
@@ -161,7 +161,7 @@ const useWeatherApi = ({ locationName, cityName }) => {
         }));
 
         fetchingData();
-    }, [locationName, cityName]);
+    }, [locationName, cityName, sunriseCityName]);
 
     useEffect(() => {
         fetchData();

@@ -43,7 +43,6 @@ const WeatherApp = () => {
     const [currentLocationName, setCurrentLocationName] = useState(
         storageLocationName || '臺北'
     );
-
     const currentLocation = findLocation(currentLocationName) || {};
 
     const [weatherElement, fetchData] = useWeatherApi(currentLocation);

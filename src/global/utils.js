@@ -1,7 +1,7 @@
-import locationName from './locationName.json';
+import availableLocations from './availableLocations.json';
 
 export const findLocation = (currLocationName) => {
-    return locationName.find(
+    return availableLocations.find(
         (location) => location.locationName === currLocationName
     );
 };

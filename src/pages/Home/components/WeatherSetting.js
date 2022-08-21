@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import styled from '@emotion/styled';
 
-import locations from '../../../global/locationName.json';
+import availableLocations from '../../../global/availableLocations.json';
 
 const WeatherSettingWrapper = styled.div`
     position: relative;
@@ -26,7 +26,7 @@ const StyledLabel = styled.label`
     margin-bottom: 15px;
 `;
 
-const StyledInputList = styled.input`
+const StyledSelect = styled.select`
     display: block;
     box-sizing: border-box;
     background: transparent;
@@ -38,6 +38,10 @@ const StyledInputList = styled.input`
     font-size: 16px;
     padding: 7px 10px;
     margin-bottom: 40px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: none;
+    outline: 0;
 `;
 
 const ButtonGroup = styled.div`
@@ -90,6 +94,8 @@ const Save = styled.button`
     }
 `;
 
+const locations = availableLocations.map((location) => location.locationName);
+
 const WeatherSetting = ({
     currLocationName,
     setCurrentPage,
@@ -102,7 +108,7 @@ const WeatherSetting = ({
     };
 
     const handleSave = () => {
-        if (locations.some((item) => item.locationName === locationName)) {
+        if (locations.some((item) => item === locationName)) {
             setCurrentLocationName(locationName);
             setCurrentPage('WeatherCard');
         } else {
@@ -115,18 +121,18 @@ const WeatherSetting = ({
         <WeatherSettingWrapper>
             <Title>設定</Title>
             <StyledLabel htmlFor='location'>地區</StyledLabel>
-            <StyledInputList
-                list='location-list'
+            <StyledSelect
                 id='location'
                 name='location'
-                value={locationName}
                 onChange={handleChange}
-            />
-            <datalist id='location-list'>
-                {locations.map(({ locationName }) => (
-                    <option key={locationName} value={locationName} />
+                value={locationName}
+            >
+                {locations.map((location) => (
+                    <option value={location} key={location}>
+                        {location}
+                    </option>
                 ))}
-            </datalist>
+            </StyledSelect>
             <ButtonGroup>
                 <Back onClick={() => setCurrentPage('WeatherCard')}>返回</Back>
                 <Save onClick={handleSave}>儲存</Save>
